@@ -5,6 +5,7 @@ import { cn } from '../lib/utils'
 import { Logo } from './Logo'
 import { Avatar } from './ui'
 import { useToast } from './Toast'
+import { logout } from '../lib/auth'
 
 export type NavItem = {
   to: string
@@ -208,14 +209,14 @@ function Sidebar({ cfg, onNavigate }: { cfg: PortalConfig; onNavigate?: () => vo
           <p className={cn('truncate text-[10px]', dark ? 'text-slate-400' : 'text-muted')}>{cfg.user.role}</p>
         </div>
         {!dark && (
-          <button title="Sair" onClick={() => navigate('/login')} className="cursor-pointer text-slate-400 hover:text-red-500">
+          <button title="Sair" onClick={() => (logout(), navigate('/login'))} className="cursor-pointer text-slate-400 hover:text-red-500">
             <LogOut size={15} />
           </button>
         )}
       </div>
       {dark && (
         <button
-          onClick={() => navigate('/login')}
+          onClick={() => (logout(), navigate('/login'))}
           className="flex cursor-pointer items-center gap-2 px-4 pb-4 text-[12px] text-slate-400 hover:text-white"
         >
           <LogOut size={14} /> Sair
@@ -286,7 +287,7 @@ function UserMenu({ cfg }: { cfg: PortalConfig }) {
             </Link>
           ))}
           <button
-            onClick={() => navigate('/login')}
+            onClick={() => (logout(), navigate('/login'))}
             className="flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[13px] text-red-500 hover:bg-red-50"
           >
             <LogOut size={14} /> Sair

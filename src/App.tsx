@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { PortalLayout } from './components/PortalLayout'
 import { adminPortal, escritorioPortal, pjPortal, pfPortal } from './portals'
 import Login from './pages/Login'
+import { RequireAuth } from './lib/auth'
 
 import SaDashboard from './pages/admin/Dashboard'
 import SaEscritorios from './pages/admin/Escritorios'
@@ -52,7 +53,7 @@ export default function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
 
-        <Route path="/admin" element={<PortalLayout cfg={adminPortal} />}>
+        <Route path="/admin" element={<RequireAuth portal="admin"><PortalLayout cfg={adminPortal} /></RequireAuth>}>
           <Route index element={<SaDashboard />} />
           <Route path="escritorios" element={<SaEscritorios />} />
           <Route path="usuarios" element={<SaUsuarios />} />
@@ -61,7 +62,7 @@ export default function App() {
           <Route path="configuracoes" element={<SaConfiguracoes />} />
         </Route>
 
-        <Route path="/escritorio" element={<PortalLayout cfg={escritorioPortal} />}>
+        <Route path="/escritorio" element={<RequireAuth portal="escritorio"><PortalLayout cfg={escritorioPortal} /></RequireAuth>}>
           <Route index element={<EsDashboard />} />
           <Route path="clientes" element={<EsClientes />} />
           <Route path="clientes/:id" element={<EsClienteDetalhe />} />
@@ -77,7 +78,7 @@ export default function App() {
           <Route path="configuracoes" element={<EsConfiguracoes />} />
         </Route>
 
-        <Route path="/pj" element={<PortalLayout cfg={pjPortal} />}>
+        <Route path="/pj" element={<RequireAuth portal="pj"><PortalLayout cfg={pjPortal} /></RequireAuth>}>
           <Route index element={<PjDashboard />} />
           <Route path="guias" element={<PjGuias />} />
           <Route path="notas" element={<PjNotas />} />
@@ -91,7 +92,7 @@ export default function App() {
           <Route path="configuracoes" element={<PjConfiguracoes />} />
         </Route>
 
-        <Route path="/pf" element={<PortalLayout cfg={pfPortal} />}>
+        <Route path="/pf" element={<RequireAuth portal="pf"><PortalLayout cfg={pfPortal} /></RequireAuth>}>
           <Route index element={<PfDashboard />} />
           <Route path="imposto-renda" element={<PfImpostoRenda />} />
           <Route path="obrigacoes" element={<PfObrigacoes />} />
