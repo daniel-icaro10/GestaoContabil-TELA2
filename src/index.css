@@ -3,6 +3,7 @@
 /* Cor primária dinâmica (white-label). Alterada em tempo real via BrandProvider. */
 :root {
   --brand: #3b4fd8;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -16,7 +17,118 @@
   --color-muted: #8a93a6;
   --color-line: #e8ebf2;
   --color-canvas: #f4f6fa;
+  --color-surface: #ffffff;
   --color-navy: #111428;
+}
+
+/* ============================================================
+   MODO ESCURO
+   Os tokens e as escalas de cor são redefinidos aqui, então todas
+   as telas mudam de tema sem precisar de classes "dark:".
+   ============================================================ */
+html.dark {
+  color-scheme: dark;
+
+  --color-ink: #e8ecf5;
+  --color-muted: #7f89a3;
+  --color-line: #232a40;
+  --color-canvas: #0b0f1c;
+  --color-surface: #131828;
+  --color-navy: #0a0d18;
+
+  /* escala neutra invertida */
+  --color-slate-50: #171d30;
+  --color-slate-100: #1d2438;
+  --color-slate-200: #283049;
+  --color-slate-300: #3a4360;
+  --color-slate-400: #66708c;
+  --color-slate-500: #8e98b2;
+  --color-slate-600: #b1b9cd;
+  --color-slate-700: #cbd2e1;
+  --color-slate-800: #dfe4ee;
+  --color-slate-900: #eef1f7;
+
+  /* tons claros coloridos viram tons translúcidos sobre o fundo escuro */
+  --tint-base: #131828;
+  --color-emerald-50: color-mix(in oklab, #10b981 12%, var(--tint-base));
+  --color-emerald-100: color-mix(in oklab, #10b981 20%, var(--tint-base));
+  --color-emerald-200: color-mix(in oklab, #10b981 32%, var(--tint-base));
+  --color-emerald-700: #4ade9c;
+  --color-emerald-800: #6ee7b7;
+  --color-emerald-900: #a7f3d0;
+
+  --color-amber-50: color-mix(in oklab, #f59e0b 12%, var(--tint-base));
+  --color-amber-100: color-mix(in oklab, #f59e0b 20%, var(--tint-base));
+  --color-amber-200: color-mix(in oklab, #f59e0b 32%, var(--tint-base));
+  --color-amber-700: #fbbf24;
+  --color-amber-800: #fcd34d;
+  --color-amber-900: #fde68a;
+
+  --color-red-50: color-mix(in oklab, #ef4444 12%, var(--tint-base));
+  --color-red-100: color-mix(in oklab, #ef4444 20%, var(--tint-base));
+  --color-red-200: color-mix(in oklab, #ef4444 32%, var(--tint-base));
+  --color-red-700: #f87171;
+
+  --color-indigo-50: color-mix(in oklab, #6366f1 14%, var(--tint-base));
+  --color-indigo-100: color-mix(in oklab, #6366f1 22%, var(--tint-base));
+  --color-indigo-200: color-mix(in oklab, #6366f1 34%, var(--tint-base));
+  --color-indigo-900: #c7d2fe;
+
+  --color-violet-50: color-mix(in oklab, #8b5cf6 14%, var(--tint-base));
+  --color-violet-100: color-mix(in oklab, #8b5cf6 22%, var(--tint-base));
+  --color-violet-200: color-mix(in oklab, #8b5cf6 34%, var(--tint-base));
+  --color-violet-800: #c4b5fd;
+
+  --color-sky-50: color-mix(in oklab, #0ea5e9 12%, var(--tint-base));
+  --color-sky-100: color-mix(in oklab, #0ea5e9 20%, var(--tint-base));
+  --color-sky-200: color-mix(in oklab, #0ea5e9 32%, var(--tint-base));
+  --color-sky-700: #38bdf8;
+  --color-sky-800: #7dd3fc;
+
+  --color-rose-100: color-mix(in oklab, #f43f5e 20%, var(--tint-base));
+  --color-teal-50: color-mix(in oklab, #14b8a6 12%, var(--tint-base));
+}
+
+/* Textos coloridos escuros ganham contraste no tema escuro */
+html.dark .text-indigo-600,
+html.dark .text-indigo-500 {
+  color: #8b93ff;
+}
+html.dark .text-violet-600 {
+  color: #a78bfa;
+}
+html.dark .text-red-600 {
+  color: #f87171;
+}
+html.dark .text-emerald-600 {
+  color: #34d399;
+}
+html.dark .text-sky-600 {
+  color: #38bdf8;
+}
+html.dark .text-rose-600 {
+  color: #fb7185;
+}
+html.dark .text-orange-600,
+html.dark .text-amber-600 {
+  color: #f5a524;
+}
+/* O texto na cor da marca fica mais claro para ler bem sobre o fundo escuro */
+html.dark .text-brand {
+  color: color-mix(in oklab, var(--brand) 62%, white);
+}
+/* Botões sólidos mantêm o tom escuro no hover */
+html.dark .hover\:bg-emerald-700:hover {
+  background-color: #047857;
+}
+html.dark .hover\:bg-amber-700:hover {
+  background-color: #b45309;
+}
+html.dark .shadow-sm,
+html.dark .shadow-lg,
+html.dark .shadow-xl,
+html.dark .shadow-2xl {
+  --tw-shadow-color: rgb(0 0 0 / 0.5);
 }
 
 html,
@@ -28,6 +140,15 @@ body,
 body {
   @apply bg-canvas text-ink font-sans antialiased;
   font-size: 14px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Fundo suave com brilho da marca */
+.app-canvas {
+  background:
+    radial-gradient(1200px 500px at 100% -10%, color-mix(in oklab, var(--brand) 7%, transparent), transparent 60%),
+    radial-gradient(900px 400px at -10% 110%, color-mix(in oklab, #8b5cf6 5%, transparent), transparent 60%),
+    var(--color-canvas);
 }
 
 /* Números com fonte larga, como nas referências */
@@ -41,8 +162,11 @@ body {
   width: 8px;
 }
 .scroll-thin::-webkit-scrollbar-thumb {
-  background: #c9ced8;
+  background: var(--color-slate-300);
   border-radius: 99px;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 @keyframes toast-in {
@@ -69,4 +193,26 @@ body {
 }
 .animate-fade {
   animation: fade-in 0.15s ease-out;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-page {
+  animation: page-in 0.25s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-page,
+  .animate-toast,
+  .animate-fade {
+    animation: none;
+  }
 }

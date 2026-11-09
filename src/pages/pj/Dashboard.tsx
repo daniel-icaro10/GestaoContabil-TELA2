@@ -197,7 +197,7 @@ export default function PjDashboard() {
                   <Td>
                     <div className="flex items-center gap-2.5">
                       <CodeTag tone={g.tone}>{g.code}</CodeTag>
-                      <span className="font-semibold text-ink">{g.name}</span>
+                      <span className="whitespace-nowrap font-semibold text-ink">{g.name}</span>
                     </div>
                   </Td>
                   <Td>{g.comp}</Td>
@@ -275,7 +275,7 @@ export default function PjDashboard() {
                   <div
                     className={cn(
                       'flex h-9 w-9 items-center justify-center rounded-lg text-brand',
-                      a.dashed ? 'border border-dashed border-brand/40 bg-white' : 'bg-violet-50 text-violet-500',
+                      a.dashed ? 'border border-dashed border-brand/40 bg-surface' : 'bg-violet-50 text-violet-500',
                     )}
                   >
                     <a.icon size={16} />

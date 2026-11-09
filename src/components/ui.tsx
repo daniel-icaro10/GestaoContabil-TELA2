@@ -7,7 +7,11 @@ export function Card({ className, children, onClick }: { className?: string; chi
   return (
     <div
       onClick={onClick}
-      className={cn('rounded-2xl border border-line bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]', className)}
+      className={cn(
+        'rounded-2xl border border-line bg-surface shadow-[0_1px_2px_rgba(16,24,40,0.04),0_4px_16px_-8px_rgba(16,24,40,0.08)] transition-[box-shadow,border-color,transform] duration-200',
+        onClick && 'cursor-pointer hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-12px_rgba(16,24,40,0.25)]',
+        className,
+      )}
     >
       {children}
     </div>
@@ -103,13 +107,13 @@ export function CodeTag({ children, tone = 'blue' }: { children: ReactNode; tone
 type BtnVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'soft' | 'danger' | 'success' | 'warning' | 'dangerOutline'
 
 const btnCls: Record<BtnVariant, string> = {
-  primary: 'bg-brand text-white hover:brightness-110 shadow-sm',
-  secondary: 'bg-white text-ink border border-line hover:bg-slate-50',
-  outline: 'bg-white text-brand border border-brand/30 hover:bg-brand/5',
+  primary: 'bg-brand text-white hover:brightness-110 shadow-sm shadow-brand/30',
+  secondary: 'bg-surface text-ink border border-line hover:bg-slate-50',
+  outline: 'bg-surface text-brand border border-brand/30 hover:bg-brand/5',
   soft: 'bg-brand/10 text-brand border border-brand/20 hover:bg-brand/15',
   ghost: 'text-slate-600 hover:bg-slate-100',
   danger: 'bg-red-500 text-white hover:bg-red-600',
-  dangerOutline: 'bg-white text-red-500 border border-red-200 hover:bg-red-50',
+  dangerOutline: 'bg-surface text-red-500 border border-red-200 hover:bg-red-50',
   success: 'bg-emerald-600 text-white hover:bg-emerald-700',
   warning: 'bg-amber-600 text-white hover:bg-amber-700',
 }
@@ -130,7 +134,7 @@ export function Button({
     <button
       {...rest}
       className={cn(
-        'inline-flex cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-lg font-semibold transition disabled:cursor-not-allowed disabled:opacity-50',
+        'inline-flex cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-lg font-semibold transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 disabled:cursor-not-allowed disabled:opacity-50',
         size === 'sm' && 'h-8 px-3 text-xs',
         size === 'md' && 'h-9 px-4 text-[13px]',
         size === 'lg' && 'h-11 px-5 text-sm',
@@ -160,7 +164,7 @@ export function IconButton({
       title={title}
       onClick={onClick}
       className={cn(
-        'inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-line bg-white text-slate-500 transition hover:bg-slate-50 hover:text-brand',
+        'inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-line bg-surface text-slate-500 transition hover:bg-slate-50 hover:text-brand',
         className,
       )}
     >
@@ -221,7 +225,7 @@ export function Chips<T extends string>({
             'h-8 cursor-pointer rounded-lg border px-3 text-xs font-medium transition',
             value === o.value
               ? 'border-brand/40 bg-brand/10 text-brand font-semibold'
-              : 'border-line bg-white text-slate-600 hover:bg-slate-50',
+              : 'border-line bg-surface text-slate-600 hover:bg-slate-50',
           )}
         >
           {o.label}
@@ -250,7 +254,7 @@ export function SearchInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="h-9 w-full rounded-lg border border-line bg-white pl-9 pr-3 text-[13px] outline-none placeholder:text-muted focus:border-brand/50 focus:ring-2 focus:ring-brand/10"
+        className="h-9 w-full rounded-lg border border-line bg-surface pl-9 pr-3 text-[13px] outline-none placeholder:text-muted focus:border-brand/50 focus:ring-2 focus:ring-brand/10"
       />
     </div>
   )
@@ -271,7 +275,7 @@ export function Input(props: InputHTMLAttributes<HTMLInputElement>) {
     <input
       {...props}
       className={cn(
-        'h-10 w-full rounded-lg border border-line bg-slate-50/60 px-3 text-[13px] text-ink outline-none placeholder:text-muted focus:border-brand/50 focus:bg-white focus:ring-2 focus:ring-brand/10',
+        'h-10 w-full rounded-lg border border-line bg-slate-50/60 px-3 text-[13px] text-ink outline-none placeholder:text-muted focus:border-brand/50 focus:bg-surface focus:ring-2 focus:ring-brand/10',
         props.className,
       )}
     />
@@ -283,7 +287,7 @@ export function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement
     <textarea
       {...props}
       className={cn(
-        'min-h-20 w-full rounded-lg border border-line bg-slate-50/60 px-3 py-2 text-[13px] text-ink outline-none placeholder:text-muted focus:border-brand/50 focus:bg-white focus:ring-2 focus:ring-brand/10',
+        'min-h-20 w-full rounded-lg border border-line bg-slate-50/60 px-3 py-2 text-[13px] text-ink outline-none placeholder:text-muted focus:border-brand/50 focus:bg-surface focus:ring-2 focus:ring-brand/10',
         props.className,
       )}
     />
@@ -307,7 +311,7 @@ export function Select({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       className={cn(
-        'h-9 cursor-pointer rounded-lg border border-line bg-white px-3 text-[13px] text-ink outline-none focus:border-brand/50',
+        'h-9 cursor-pointer rounded-lg border border-line bg-surface px-3 text-[13px] text-ink outline-none focus:border-brand/50',
         className,
       )}
     >
@@ -341,7 +345,7 @@ export function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: 
       )}
     >
       <span
-        className={cn('absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all', checked ? 'left-[18px]' : 'left-0.5')}
+        className={cn('absolute top-0.5 h-4 w-4 rounded-full bg-surface shadow transition-all', checked ? 'left-[18px]' : 'left-0.5')}
       />
     </button>
   )
@@ -438,7 +442,7 @@ export function Table({ head, children, className }: { head: ReactNode[]; childr
     <div className={cn('scroll-thin overflow-x-auto', className)}>
       <table className="w-full min-w-[720px] text-left">
         <thead>
-          <tr className="border-y border-line bg-slate-50/70">
+          <tr className="border-y border-line bg-slate-50">
             {head.map((h, i) => (
               <th
                 key={i}
@@ -452,7 +456,7 @@ export function Table({ head, children, className }: { head: ReactNode[]; childr
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-line">{children}</tbody>
+        <tbody className="divide-y divide-line [&>tr]:transition-colors [&>tr:hover]:bg-slate-50/60">{children}</tbody>
       </table>
     </div>
   )
@@ -499,10 +503,10 @@ export function Modal({
 
   if (!open) return null
   return (
-    <div className="animate-fade fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4" onClick={onClose}>
+    <div className="animate-fade fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-[2px]" onClick={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className={cn('flex max-h-[90vh] w-full flex-col rounded-2xl bg-white shadow-2xl', width)}
+        className={cn('animate-page flex max-h-[90vh] w-full flex-col rounded-2xl border border-line bg-surface shadow-2xl', width)}
       >
         <div className="flex items-start justify-between gap-4 border-b border-line px-6 py-4">
           <div>
@@ -609,7 +613,7 @@ export function Dropzone({
       className={cn(
         'flex flex-col items-center justify-center rounded-2xl border-2 border-dashed text-center transition',
         compact ? 'px-6 py-6' : 'px-6 py-10',
-        over ? 'border-brand bg-brand/5' : 'border-slate-200 bg-white',
+        over ? 'border-brand bg-brand/5' : 'border-slate-200 bg-surface',
         !button && 'cursor-pointer hover:border-brand/40',
       )}
     >

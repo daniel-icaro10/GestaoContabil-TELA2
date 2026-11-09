@@ -107,7 +107,7 @@ export default function Dashboard() {
               <button
                 key={a.label}
                 onClick={a.onClick}
-                className="flex w-full cursor-pointer items-center justify-between rounded-lg border border-line bg-slate-50/60 px-3 py-2.5 text-left text-[13px] font-semibold text-ink transition hover:border-brand/30 hover:bg-white"
+                className="flex w-full cursor-pointer items-center justify-between rounded-lg border border-line bg-slate-50/60 px-3 py-2.5 text-left text-[13px] font-semibold text-ink transition hover:border-brand/30 hover:bg-surface"
               >
                 {a.label}
                 <ArrowRight size={13} className={a.arrow} />

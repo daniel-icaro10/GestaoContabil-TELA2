@@ -76,9 +76,9 @@ export function PaymentModal({
       </div>
       {method === 'pix' && (
         <div className="mt-4 rounded-xl border border-line bg-slate-50 p-4 text-center">
-          <div className="mx-auto grid h-32 w-32 grid-cols-8 gap-0.5 rounded-lg bg-white p-2">
+          <div className="mx-auto grid h-32 w-32 grid-cols-8 gap-0.5 rounded-lg bg-surface p-2">
             {Array.from({ length: 64 }).map((_, i) => (
-              <div key={i} className={(i * 7 + (i % 5)) % 3 === 0 ? 'bg-ink' : 'bg-white'} />
+              <div key={i} className={(i * 7 + (i % 5)) % 3 === 0 ? 'bg-black' : 'bg-[#fff]'} />
             ))}
           </div>
           <p className="mt-3 break-all text-[10px] text-muted">{PIX_CODE.slice(0, 60)}...</p>

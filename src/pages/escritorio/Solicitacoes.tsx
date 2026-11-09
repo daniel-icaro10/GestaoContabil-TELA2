@@ -188,7 +188,7 @@ export default function Solicitacoes() {
                   <div
                     className={cn(
                       'max-w-[80%] rounded-2xl px-3.5 py-2.5 text-[13px]',
-                      m.escritorio ? 'rounded-br-sm bg-brand text-white' : 'rounded-bl-sm border border-line bg-white text-ink',
+                      m.escritorio ? 'rounded-br-sm bg-brand text-white' : 'rounded-bl-sm border border-line bg-surface text-ink',
                     )}
                   >
                     <p className={cn('mb-0.5 text-[10px] font-semibold', m.escritorio ? 'text-white/70' : 'text-muted')}>

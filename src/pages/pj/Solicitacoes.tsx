@@ -188,7 +188,7 @@ export default function Solicitacoes() {
               {chat.mensagens.length === 0 && <p className="py-4 text-center text-xs text-muted">Nenhuma mensagem ainda.</p>}
               {chat.mensagens.map((m, i) => (
                 <div key={i} className={cn('flex', m.de === 'cliente' ? 'justify-end' : 'justify-start')}>
-                  <div className={cn('max-w-[80%] rounded-xl px-3 py-2 text-[12px]', m.de === 'cliente' ? 'bg-brand text-white' : 'border border-line bg-white text-ink')}>
+                  <div className={cn('max-w-[80%] rounded-xl px-3 py-2 text-[12px]', m.de === 'cliente' ? 'bg-brand text-white' : 'border border-line bg-surface text-ink')}>
                     <p>{m.texto}</p>
                     <p className={cn('mt-1 text-[10px]', m.de === 'cliente' ? 'text-white/70' : 'text-muted')}>
                       {m.de === 'cliente' ? 'Você' : 'Carlos Eduardo'} · {m.hora}

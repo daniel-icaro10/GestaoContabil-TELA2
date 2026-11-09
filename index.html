@@ -11,6 +11,14 @@
       rel="stylesheet"
     />
     <title>HUBContábil Financial</title>
+    <script>
+      // aplica o tema antes de renderizar para evitar "piscar" branco
+      try {
+        var t = localStorage.getItem('hub.theme')
+        if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches))
+          document.documentElement.classList.add('dark')
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

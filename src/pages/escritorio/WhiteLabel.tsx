@@ -66,7 +66,7 @@ export default function WhiteLabel() {
       {/* Preview */}
       <Card className="bg-gradient-to-br from-slate-50 to-indigo-50/40 p-5">
         <p className="mb-3 text-[10px] font-semibold tracking-[0.2em] text-slate-400">PREVIEW - PORTAL DO CLIENTE</p>
-        <div className="flex overflow-hidden rounded-xl border border-line bg-white">
+        <div className="flex overflow-hidden rounded-xl border border-line bg-surface">
           <div className="w-28 shrink-0 border-r border-line p-3 sm:w-32">
             <div className="mb-3 flex items-center gap-2">
               {logo ? (
@@ -101,7 +101,7 @@ export default function WhiteLabel() {
               ]
                 .filter(([, , v]) => v)
                 .map(([l, n]) => (
-                  <div key={l as string} className="rounded-md border border-line bg-white p-2">
+                  <div key={l as string} className="rounded-md border border-line bg-surface p-2">
                     <p className="text-[8px] text-muted">{l}</p>
                     <p className="num text-sm">{n}</p>
                     <div className="mt-1 h-1 rounded-full" style={{ background: cor, width: '65%' }} />

@@ -4,13 +4,16 @@ import './index.css'
 import App from './App'
 import { ToastProvider } from './components/Toast'
 import { BrandProvider } from './components/Brand'
+import { ThemeProvider } from './components/Theme'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrandProvider>
-      <ToastProvider>
-        <App />
-      </ToastProvider>
-    </BrandProvider>
+    <ThemeProvider>
+      <BrandProvider>
+        <ToastProvider>
+          <App />
+        </ToastProvider>
+      </BrandProvider>
+    </ThemeProvider>
   </StrictMode>,
 )

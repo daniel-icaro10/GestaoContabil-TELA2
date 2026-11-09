@@ -9,19 +9,14 @@ Plataforma SaaS de gestão contábil com 4 portais:
 | Cliente PJ | `/pj` | Empresas atendidas pelo escritório |
 | Cliente PF | `/pf` | Pessoas físicas atendidas pelo escritório |
 
-## Logins de demonstração
+## Acesso
 
-| Perfil | E-mail | Senha | Pode acessar |
-|---|---|---|---|
-| Super Admin | `admin@hubcontabil.com` | `admin123` | todos os portais |
-| Escritório Contábil | `escritorio@hubcontabil.com` | `escritorio123` | Escritório, PJ e PF |
-| Cliente PJ | `pj@hubcontabil.com` | `pj123` | só o portal PJ |
-| Cliente PF | `pf@hubcontabil.com` | `pf123` | só o portal PF |
+Há um login por perfil (Super Admin, Escritório, Cliente PJ, Cliente PF). As credenciais **não ficam no código
+nem neste README**: `src/lib/auth.tsx` guarda apenas o hash SHA-256 de `email:senha`. Peça os acessos ao responsável.
+Sem login (ou sem permissão), as rotas voltam para `/login`.
+É uma proteção apenas de front-end; a autenticação real virá com o backend.
 
-Os usuários ficam em `src/lib/auth.tsx`. Sem login (ou sem permissão), as rotas voltam para `/login`.
-É uma proteção apenas visual (front-end); a autenticação real virá com o backend.
-
-A tela `/login` também permite clicar no perfil para preencher o acesso. Todos os dados são fictícios e ficam em memória
+Todos os dados são fictícios e ficam em memória
 (arquivos `data.ts` de cada portal em `src/pages/<portal>/`). A cor da marca (white-label) é salva no navegador.
 
 ## Rodar localmente

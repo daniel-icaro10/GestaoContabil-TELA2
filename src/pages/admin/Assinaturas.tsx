@@ -5,6 +5,8 @@ import { useToast } from '../../components/Toast'
 import { brl, downloadCsv, downloadFile } from '../../lib/utils'
 import { planPrice, subStatusTone, subscriptions as seed, type PlanName, type SubStatus, type Subscription } from './data'
 import { PlanBadge } from './shared'
+import { useNavigate } from 'react-router-dom'
+import { credentialsComplete, loadCoraConfig } from '../../lib/cora'
 
 type Filter = 'Todos' | SubStatus
 
@@ -17,6 +19,9 @@ export default function Assinaturas() {
 
   const filtered = useMemo(() => list.filter((s) => filter === 'Todos' || s.status === filter), [list, filter])
   const count = (st: SubStatus) => list.filter((s) => s.status === st).length
+  const navigate = useNavigate()
+  const cora = loadCoraConfig()
+  const coraReady = cora.enabled && credentialsComplete(cora.mode, cora.credentials[cora.activeEnv])
 
   function update(id: number, patch: Partial<Subscription>, msg: string, kind: 'success' | 'info' | 'warning' = 'success') {
     setList((l) => l.map((s) => (s.id === id ? { ...s, ...patch } : s)))
@@ -26,6 +31,24 @@ export default function Assinaturas() {
 
   return (
     <div className="space-y-5">
+      <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-3">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#fe3e6d] text-sm font-extrabold text-white">C</div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[13px] font-bold text-ink">Cobrança via Banco Cora</p>
+          <p className="text-[11px] text-muted">
+            {coraReady
+              ? `Boletos e Pix emitidos automaticamente · ambiente ${cora.activeEnv === 'production' ? 'Produção' : 'Stage'}`
+              : 'Integração ainda não configurada — as cobranças não estão sendo emitidas.'}
+          </p>
+        </div>
+        <Badge tone={coraReady ? 'green' : 'amber'} dot>
+          {coraReady ? 'Conectado' : 'Pendente'}
+        </Badge>
+        <Button size="sm" variant="outline" onClick={() => navigate('/admin/configuracoes?tab=cora')}>
+          Configurar
+        </Button>
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Receita Recorrente Mensal" value="R$ 89.340" valueClass="text-violet-500" sub="Outubro 2024" />
         <StatCard label="Assinaturas Ativas" value={count('Ativa')} valueClass="text-indigo-600" sub="em cobrança ativa" />
@@ -125,9 +148,13 @@ export default function Assinaturas() {
               {(selected.status === 'Inadimplente' || selected.status === 'Pendente') && (
                 <Button
                   variant="secondary"
-                  onClick={() => toast(`Lembrete de cobrança enviado para ${selected.office}.`, 'info')}
+                  onClick={() => {
+                    if (!coraReady)
+                      return toast('Configure a integração com o Banco Cora em Configurações › Pagamentos (Cora).', 'warning')
+                    toast(`Boleto/Pix de ${brl(selected.value)} emitido via Cora e enviado para ${selected.office}.`)
+                  }}
                 >
-                  Enviar cobrança
+                  Gerar cobrança (Cora)
                 </Button>
               )}
               {selected.status !== 'Ativa' && selected.status !== 'Cancelada' && (

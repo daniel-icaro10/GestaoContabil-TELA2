@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate, Link } from 'react-router-dom'
-import { Bell, ArrowRight, ArrowLeft, LogOut, Menu, X, ChevronDown, Check, type LucideIcon } from 'lucide-react'
+import { Bell, ArrowRight, ArrowLeft, LogOut, Menu, X, ChevronDown, Check, Lock, type LucideIcon } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { Logo } from './Logo'
 import { Avatar } from './ui'
 import { useToast } from './Toast'
 import { logout } from '../lib/auth'
+import { ThemeToggle } from './Theme'
+import { moduleLabel, useOfficeModules, type ModuleKey } from '../lib/modules'
 
 export type NavItem = {
   to: string
@@ -18,15 +20,27 @@ export type NavItem = {
   subtitle: string
   /** quando true, o cabeçalho não mostra o prefixo do portal */
   noPrefix?: boolean
+  /** módulo necessário para ver esta tela (configurado pelo Super Admin por escritório) */
+  module?: ModuleKey
 }
 
-export type SwitchLink = { label: string; to: string; tone: 'green' | 'sky' | 'violet' | 'brand'; back?: boolean }
+export type SwitchLink = {
+  label: string
+  to: string
+  tone: 'green' | 'sky' | 'violet' | 'brand'
+  back?: boolean
+  module?: ModuleKey
+}
 
 export type SelectorOption = { id: string; name: string; doc: string; initials: string }
 
 export type PortalConfig = {
   variant: 'light' | 'dark'
   prefix: string
+  /** o portal inteiro depende deste módulo */
+  module?: ModuleKey
+  /** portal pertence a um escritório: aplica os módulos contratados */
+  officeScoped?: boolean
   logoTag?: { label: string; className: string }
   headerBadge?: { label: string; className: string; dot: string }
   sections: { label: string; items: NavItem[] }[]
@@ -67,13 +81,13 @@ function Selector({ cfg }: { cfg: NonNullable<PortalConfig['selector']> }) {
       <button
         onClick={() => many && setOpen((o) => !o)}
         className={cn(
-          'flex w-full items-center gap-2.5 rounded-xl border border-line bg-white px-3 py-2.5 text-left shadow-sm',
+          'flex w-full items-center gap-2.5 rounded-xl border border-line bg-surface px-3 py-2.5 text-left shadow-sm',
           many && 'cursor-pointer hover:border-brand/30',
         )}
       >
         <div
           className={cn(
-            'flex h-8 w-8 shrink-0 items-center justify-center text-[11px] font-bold text-white',
+            'flex h-9 w-9 shrink-0 items-center justify-center text-[12px] font-bold text-white',
             cfg.round ? 'rounded-full' : 'rounded-lg',
             cfg.avatarClass ?? 'bg-gradient-to-br from-brand to-violet-500',
           )}
@@ -81,13 +95,13 @@ function Selector({ cfg }: { cfg: NonNullable<PortalConfig['selector']> }) {
           {current.initials}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-[12px] font-bold text-ink">{current.name}</p>
-          <p className="truncate text-[10px] tracking-wide text-muted">{current.doc}</p>
+          <p className="text-[13px] font-bold leading-tight text-ink">{current.name}</p>
+          <p className="mt-0.5 text-[11px] tracking-wide text-muted">{current.doc}</p>
         </div>
         {many && <ChevronDown size={15} className="text-muted" />}
       </button>
       {open && (
-        <div className="animate-fade absolute left-0 right-0 top-full z-30 mt-1 rounded-xl border border-line bg-white p-1 shadow-xl">
+        <div className="animate-fade absolute left-0 right-0 top-full z-30 mt-1 rounded-xl border border-line bg-surface p-1 shadow-xl">
           {cfg.options.map((o) => (
             <button
               key={o.id}
@@ -117,8 +131,8 @@ function Sidebar({ cfg, onNavigate }: { cfg: PortalConfig; onNavigate?: () => vo
   return (
     <aside
       className={cn(
-        'flex h-full w-[196px] shrink-0 flex-col border-r',
-        dark ? 'border-white/5 bg-navy text-slate-300' : 'border-line bg-white',
+        'flex h-full w-[248px] shrink-0 flex-col border-r',
+        dark ? 'border-white/5 bg-navy text-slate-400' : 'border-line bg-surface',
       )}
     >
       <div className={cn('px-4 pt-4 pb-3', dark && 'border-b border-white/10 pb-4')}>
@@ -145,10 +159,10 @@ function Sidebar({ cfg, onNavigate }: { cfg: PortalConfig; onNavigate?: () => vo
 
       {cfg.selector && <Selector cfg={cfg.selector} />}
 
-      <nav className="scroll-thin flex-1 overflow-y-auto px-2 pb-3">
+      <nav className="scroll-thin flex-1 overflow-y-auto px-3 pb-3">
         {cfg.sections.map((s) => (
-          <div key={s.label} className="mt-3">
-            <p className={cn('mb-1.5 px-2.5 text-[9px] font-bold tracking-[0.15em]', dark ? 'text-slate-500' : 'text-slate-400')}>
+          <div key={s.label} className="mt-4">
+            <p className={cn('mb-1.5 px-3 text-[10px] font-bold tracking-[0.15em]', dark ? 'text-slate-500' : 'text-slate-400')}>
               {s.label}
             </p>
             {s.items.map((it) => (
@@ -159,20 +173,20 @@ function Sidebar({ cfg, onNavigate }: { cfg: PortalConfig; onNavigate?: () => vo
                 onClick={onNavigate}
                 className={({ isActive }) =>
                   cn(
-                    'group mb-0.5 flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[12.5px] transition',
+                    'group relative mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] transition',
                     dark
                       ? isActive
                         ? 'border border-violet-500/40 bg-violet-500/15 font-semibold text-white'
-                        : 'border border-transparent text-slate-400 hover:bg-white/5 hover:text-white'
+                        : 'border border-transparent text-[#9aa3bd] hover:bg-white/5 hover:text-white'
                       : isActive
-                        ? 'bg-brand/10 font-semibold text-brand'
+                        ? 'bg-brand/10 font-semibold text-brand before:absolute before:-left-3 before:top-2 before:bottom-2 before:w-1 before:rounded-r-full before:bg-brand'
                         : 'text-slate-600 hover:bg-slate-50 hover:text-ink',
                   )
                 }
               >
                 {({ isActive }) => (
                   <>
-                    <it.icon size={15} strokeWidth={1.8} />
+                    <it.icon size={17} strokeWidth={1.8} className="shrink-0" />
                     <span className="flex-1">{it.label}</span>
                     {isActive && <span className={cn('h-1.5 w-1.5 rounded-full', dark ? 'bg-violet-400' : 'bg-brand')} />}
                   </>
@@ -184,13 +198,13 @@ function Sidebar({ cfg, onNavigate }: { cfg: PortalConfig; onNavigate?: () => vo
       </nav>
 
       {cfg.switches.length > 0 && (
-        <div className="space-y-1.5 px-2 pb-3">
+        <div className="space-y-1.5 px-3 pb-3">
           {cfg.switches.map((s) => (
             <Link
               key={s.label}
               to={s.to}
               className={cn(
-                'flex items-center gap-2 rounded-lg border px-2.5 py-2 text-[11px] font-semibold transition hover:brightness-95',
+                'flex items-center gap-2 rounded-lg border px-3 py-2.5 text-[12px] font-semibold transition hover:brightness-95',
                 switchCls[s.tone],
               )}
             >
@@ -202,11 +216,11 @@ function Sidebar({ cfg, onNavigate }: { cfg: PortalConfig; onNavigate?: () => vo
         </div>
       )}
 
-      <div className={cn('flex items-center gap-2.5 border-t px-3 py-3', dark ? 'border-white/10' : 'border-line')}>
-        <Avatar text={cfg.user.initials} size={30} gradient />
+      <div className={cn('flex items-center gap-3 border-t px-4 py-3.5', dark ? 'border-white/10' : 'border-line')}>
+        <Avatar text={cfg.user.initials} size={34} gradient />
         <div className="min-w-0 flex-1">
-          <p className={cn('truncate text-[12px] font-bold', dark ? 'text-white' : 'text-ink')}>{cfg.user.name}</p>
-          <p className={cn('truncate text-[10px]', dark ? 'text-slate-400' : 'text-muted')}>{cfg.user.role}</p>
+          <p className={cn('truncate text-[13px] font-bold', dark ? 'text-white' : 'text-ink')}>{cfg.user.name}</p>
+          <p className={cn('truncate text-[11px]', dark ? 'text-[#9aa3bd]' : 'text-muted')}>{cfg.user.role}</p>
         </div>
         {!dark && (
           <button title="Sair" onClick={() => (logout(), navigate('/login'))} className="cursor-pointer text-slate-400 hover:text-red-500">
@@ -237,13 +251,13 @@ function Notifications({ items }: { items: PortalConfig['notifications'] }) {
           setOpen((o) => !o)
           setUnread(false)
         }}
-        className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-line bg-white text-slate-500 hover:text-brand"
+        className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-line bg-surface text-slate-500 hover:text-brand"
       >
         <Bell size={16} />
-        {unread && <span className="absolute right-2 top-1.5 h-2 w-2 rounded-full border border-white bg-red-500" />}
+        {unread && <span className="absolute right-2 top-1.5 h-2 w-2 rounded-full border border-surface bg-red-500" />}
       </button>
       {open && (
-        <div className="animate-fade absolute right-0 top-full z-40 mt-2 w-80 rounded-xl border border-line bg-white shadow-xl">
+        <div className="animate-fade absolute right-0 top-full z-40 mt-2 w-80 rounded-xl border border-line bg-surface shadow-xl">
           <div className="flex items-center justify-between border-b border-line px-4 py-3">
             <p className="text-sm font-bold">Notificações</p>
             <span className="text-[11px] text-muted">{items.length} recentes</span>
@@ -276,7 +290,7 @@ function UserMenu({ cfg }: { cfg: PortalConfig }) {
         <Avatar text={cfg.user.initials} size={34} gradient />
       </button>
       {open && (
-        <div className="animate-fade absolute right-0 top-full z-40 mt-2 w-56 rounded-xl border border-line bg-white p-1 shadow-xl">
+        <div className="animate-fade absolute right-0 top-full z-40 mt-2 w-56 rounded-xl border border-line bg-surface p-1 shadow-xl">
           <div className="border-b border-line px-3 py-2.5">
             <p className="text-[13px] font-bold">{cfg.user.name}</p>
             <p className="text-[11px] text-muted">{cfg.user.role}</p>
@@ -302,7 +316,7 @@ function Footer() {
   const toast = useToast()
   const links = ['Central de Ajuda', 'Política de Privacidade', 'Termos de Uso', 'Contato']
   return (
-    <footer className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-line bg-white px-6 py-4">
+    <footer className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-line bg-surface px-6 py-4">
       <Logo />
       <div className="flex flex-wrap gap-5">
         {links.map((l) => (
@@ -321,10 +335,43 @@ function Footer() {
   )
 }
 
-export function PortalLayout({ cfg, children }: { cfg: PortalConfig; children?: ReactNode }) {
+function ModuleLocked({ module }: { module: ModuleKey }) {
+  const navigate = useNavigate()
+  return (
+    <div className="flex min-h-[60vh] items-center justify-center">
+      <div className="max-w-md rounded-2xl border border-line bg-surface p-8 text-center shadow-sm">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
+          <Lock size={22} />
+        </div>
+        <h2 className="mt-4 text-lg font-bold text-ink">Módulo não contratado</h2>
+        <p className="mt-1.5 text-sm text-muted">
+          O módulo <b className="text-ink">{moduleLabel(module)}</b> não está ativo para este escritório. Fale com o administrador da
+          plataforma para liberar o acesso.
+        </p>
+        <button
+          onClick={() => navigate(-1)}
+          className="mt-5 cursor-pointer rounded-lg border border-line px-4 py-2 text-[13px] font-semibold text-slate-600 hover:bg-slate-50"
+        >
+          Voltar
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export function PortalLayout({ cfg: baseCfg, children }: { cfg: PortalConfig; children?: ReactNode }) {
   const { pathname } = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
-  const all = cfg.sections.flatMap((s) => s.items)
+  const mods = useOfficeModules()
+  const enabled = (k?: ModuleKey) => !baseCfg.officeScoped || !k || mods.includes(k)
+  const cfg: PortalConfig = {
+    ...baseCfg,
+    sections: baseCfg.sections
+      .map((s) => ({ ...s, items: s.items.filter((i) => enabled(i.module)) }))
+      .filter((s) => s.items.length > 0),
+    switches: baseCfg.switches.filter((s) => enabled(s.module)),
+  }
+  const all = baseCfg.sections.flatMap((s) => s.items)
   const current =
     all.find((i) => i.to === pathname) ??
     [...all].sort((a, b) => b.to.length - a.to.length).find((i) => pathname.startsWith(i.to + '/')) ??
@@ -332,6 +379,8 @@ export function PortalLayout({ cfg, children }: { cfg: PortalConfig; children?: 
   const title = current.noPrefix
     ? current.title ?? current.label
     : `${cfg.prefix} / ${current.num ? current.num + ' ' : ''}${current.title ?? current.label}`
+
+  const lockedBy = !enabled(baseCfg.module) ? baseCfg.module : !enabled(current.module) ? current.module : undefined
 
   const mainRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -348,16 +397,16 @@ export function PortalLayout({ cfg, children }: { cfg: PortalConfig; children?: 
           <div className="h-full">
             <Sidebar cfg={cfg} onNavigate={() => setMobileOpen(false)} />
           </div>
-          <div className="flex-1 bg-slate-900/40" onClick={() => setMobileOpen(false)}>
-            <button className="m-3 rounded-lg bg-white p-2">
+          <div className="flex-1 bg-black/50" onClick={() => setMobileOpen(false)}>
+            <button className="m-3 rounded-lg bg-surface p-2">
               <X size={18} />
             </button>
           </div>
         </div>
       )}
 
-      <div ref={mainRef} className="scroll-thin flex h-full min-w-0 flex-1 flex-col overflow-y-auto">
-        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-line bg-white/95 px-4 py-3 backdrop-blur sm:px-6">
+      <div ref={mainRef} className="app-canvas scroll-thin flex h-full min-w-0 flex-1 flex-col overflow-y-auto">
+        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-line bg-surface/80 px-4 py-3 backdrop-blur-md sm:px-6">
           <button onClick={() => setMobileOpen(true)} className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 lg:hidden">
             <Menu size={20} />
           </button>
@@ -376,11 +425,14 @@ export function PortalLayout({ cfg, children }: { cfg: PortalConfig; children?: 
               {cfg.headerBadge.label}
             </span>
           )}
+          <ThemeToggle />
           {cfg.variant === 'light' && <Notifications items={cfg.notifications} />}
           <UserMenu cfg={cfg} />
         </header>
 
-        <main className="w-full flex-1 p-4 sm:p-6">{children ?? <Outlet />}</main>
+        <main key={pathname} className="animate-page w-full flex-1 p-4 sm:p-6">
+          {lockedBy ? <ModuleLocked module={lockedBy} /> : (children ?? <Outlet />)}
+        </main>
         {cfg.showFooter && <Footer />}
       </div>
     </div>

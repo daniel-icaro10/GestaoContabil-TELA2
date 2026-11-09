@@ -231,7 +231,7 @@ function TabSeguranca() {
         <div className="flex flex-col items-center gap-4">
           <div className="grid h-36 w-36 grid-cols-8 gap-0.5 rounded-lg border border-line p-2">
             {Array.from({ length: 64 }).map((_, i) => (
-              <div key={i} className={cn('rounded-[1px]', (i * 7 + (i % 5) * 3) % 3 === 0 ? 'bg-ink' : 'bg-white')} />
+              <div key={i} className={cn('rounded-[1px]', (i * 7 + (i % 5) * 3) % 3 === 0 ? 'bg-black' : 'bg-[#fff]')} />
             ))}
           </div>
           <p className="num text-xs text-slate-500">HUBC-7K2M-Q9XA-4LTP</p>

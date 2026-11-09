@@ -140,7 +140,7 @@ export default function Configuracoes() {
           </div>
           <p className="mt-1 text-xs text-muted">Veja como a interface do seu cliente responde à sua paleta:</p>
           <div className="mt-4 space-y-2.5 rounded-xl border border-line bg-slate-50 p-3">
-            <div className="flex items-center justify-between rounded-lg border border-line bg-white px-3 py-2.5">
+            <div className="flex items-center justify-between rounded-lg border border-line bg-surface px-3 py-2.5">
               <span className="flex min-w-0 items-center gap-2 text-[11px] font-bold">
                 <span className="h-4 w-1 rounded bg-brand" />
                 <span className="truncate">{nome || 'Seu escritório'}</span>
@@ -148,18 +148,18 @@ export default function Configuracoes() {
               <span className="shrink-0 rounded-md bg-brand px-2 py-1 text-[9px] font-bold text-white">+ Nova Ação</span>
             </div>
             <div className="grid grid-cols-2 gap-2.5">
-              <div className="rounded-lg border border-line bg-white p-3">
+              <div className="rounded-lg border border-line bg-surface p-3">
                 <p className="text-[9px] text-muted">Tributos Pendentes</p>
                 <p className="num mt-1 text-[14px]">R$ 1.240,00</p>
                 <div className="mt-2 h-1 rounded bg-slate-100"><div className="h-full w-3/4 rounded bg-brand" /></div>
               </div>
-              <div className="rounded-lg border border-line bg-white p-3">
+              <div className="rounded-lg border border-line bg-surface p-3">
                 <p className="text-[9px] text-muted">Status Fiscal</p>
                 <p className="mt-1 text-[11px] font-bold text-emerald-600">✓ Regular</p>
                 <p className="mt-2 rounded bg-brand/10 py-1 text-center text-[9px] font-semibold text-brand">Ver Certidão</p>
               </div>
             </div>
-            <div className="flex items-center justify-between rounded-lg border border-line bg-white px-3 py-2.5">
+            <div className="flex items-center justify-between rounded-lg border border-line bg-surface px-3 py-2.5">
               <span className="flex items-center gap-2 text-[11px] font-semibold">
                 <span className="rounded border border-brand/30 bg-brand/10 px-1 text-[8px] font-bold text-brand">DAS</span> Simples Nacional
               </span>

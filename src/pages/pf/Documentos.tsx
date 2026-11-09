@@ -54,7 +54,7 @@ export default function Documentos() {
           onClick={() => setCat('Todos')}
           className={cn(
             'flex cursor-pointer items-center justify-between rounded-xl border px-3 py-3 text-left text-[12px] font-semibold transition',
-            cat === 'Todos' ? 'border-slate-300 bg-slate-200/70 text-ink' : 'border-line bg-white text-slate-600 hover:bg-slate-50',
+            cat === 'Todos' ? 'border-slate-300 bg-slate-200/70 text-ink' : 'border-line bg-surface text-slate-600 hover:bg-slate-50',
           )}
         >
           Todos <span className="num text-slate-500">{docs.length}</span>
@@ -65,7 +65,7 @@ export default function Documentos() {
             onClick={() => setCat(c.key)}
             className={cn(
               'flex cursor-pointer items-center justify-between gap-2 rounded-xl border px-3 py-3 text-left text-[12px] font-semibold transition',
-              cat === c.key ? 'border-brand/40 bg-brand/10 text-brand' : 'border-line bg-white text-slate-700 hover:bg-slate-50',
+              cat === c.key ? 'border-brand/40 bg-brand/10 text-brand' : 'border-line bg-surface text-slate-700 hover:bg-slate-50',
             )}
           >
             <span className="leading-tight">{c.key}</span>

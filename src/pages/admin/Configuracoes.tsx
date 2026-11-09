@@ -4,8 +4,10 @@ import { Badge, Button, Card, Field, Input, Select, Tabs, Textarea, Toggle } fro
 import { useToast } from '../../components/Toast'
 import { BRAND_COLORS, useBrand } from '../../components/Brand'
 import { cn } from '../../lib/utils'
+import CoraSettings from './CoraSettings'
+import { useSearchParams } from 'react-router-dom'
 
-type Tab = 'geral' | 'marca' | 'notificacoes' | 'seguranca' | 'integracoes'
+type Tab = 'geral' | 'marca' | 'notificacoes' | 'seguranca' | 'integracoes' | 'cora'
 
 function Section({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
   return (
@@ -32,7 +34,8 @@ function ToggleRow({ label, desc, checked, onChange }: { label: string; desc?: s
 export default function Configuracoes() {
   const toast = useToast()
   const brand = useBrand()
-  const [tab, setTab] = useState<Tab>('geral')
+  const [params] = useSearchParams()
+  const [tab, setTab] = useState<Tab>(params.get('tab') === 'cora' ? 'cora' : 'geral')
 
   const [geral, setGeral] = useState({
     nome: 'HUBContábil Financial',
@@ -48,7 +51,6 @@ export default function Configuracoes() {
   const [notif, setNotif] = useState({ novoEscritorio: true, inadimplencia: true, limitePlano: true, resumoSemanal: false, emailAlertas: 'alertas@hubcontabil.com.br' })
   const [seg, setSeg] = useState({ twoFactor: true, sessao: '60', senhaMin: 8, bloqueio: true, ipRestrito: false, logs: true })
   const [integ, setInteg] = useState([
-    { id: 'gateway', name: 'Gateway de Pagamentos', desc: 'Cobrança recorrente via cartão, boleto e Pix', on: true },
     { id: 'receita', name: 'Receita Federal (e-CAC)', desc: 'Consulta de situação fiscal e CND', on: true },
     { id: 'esocial', name: 'eSocial', desc: 'Transmissão de eventos de folha', on: true },
     { id: 'nfse', name: 'NFS-e Nacional', desc: 'Emissão de notas fiscais de serviço', on: true },
@@ -59,7 +61,7 @@ export default function Configuracoes() {
   const save = () => toast('Configurações salvas com sucesso.')
 
   return (
-    <div className="max-w-[680px] space-y-5">
+    <div className={cn('space-y-5', tab === 'cora' ? 'max-w-[920px]' : 'max-w-[680px]')}>
       <Tabs
         value={tab}
         onChange={setTab}
@@ -69,8 +71,11 @@ export default function Configuracoes() {
           { value: 'notificacoes', label: 'Notificações' },
           { value: 'seguranca', label: 'Segurança' },
           { value: 'integracoes', label: 'Integrações' },
+          { value: 'cora', label: 'Pagamentos (Cora)' },
         ]}
       />
+
+      {tab === 'cora' && <CoraSettings />}
 
       {tab === 'geral' && (
         <>
@@ -141,7 +146,7 @@ export default function Configuracoes() {
                 type="color"
                 value={brand.color}
                 onChange={(e) => brand.setColor(e.target.value)}
-                className="h-10 w-12 cursor-pointer rounded-lg border border-line bg-white p-1"
+                className="h-10 w-12 cursor-pointer rounded-lg border border-line bg-surface p-1"
               />
               <Input value={brand.color} onChange={(e) => /^#[0-9a-fA-F]{0,6}$/.test(e.target.value) && brand.setColor(e.target.value)} className="w-32 uppercase" />
             </div>
@@ -230,11 +235,13 @@ export default function Configuracoes() {
         </Section>
       )}
 
-      <div className="flex justify-end">
-        <Button size="lg" icon={<Save size={16} />} onClick={save}>
-          Salvar alterações
-        </Button>
-      </div>
+      {tab !== 'cora' && (
+        <div className="flex justify-end">
+          <Button size="lg" icon={<Save size={16} />} onClick={save}>
+            Salvar alterações
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

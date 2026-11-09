@@ -19,6 +19,8 @@ import { useToast } from '../../components/Toast'
 import { cn, matches } from '../../lib/utils'
 import { offices as seed, officeStatusTone, planPrice, todayBR, type Office, type OfficeStatus, type PlanName } from './data'
 import { LetterBox, PlanBadge } from './shared'
+import { ModulesCount, OfficeModulesModal } from './OfficeModules'
+import { getOfficeModules, moduleLabel } from '../../lib/modules'
 
 const PAGE = 8
 type Filter = 'Todos' | OfficeStatus
@@ -44,6 +46,8 @@ export default function Escritorios() {
   const [editing, setEditing] = useState<Office | null>(null)
   const [form, setForm] = useState(empty)
   const [formOpen, setFormOpen] = useState(false)
+  const [modulesOf, setModulesOf] = useState<Office | null>(null)
+  const [, setTick] = useState(0)
 
   const filtered = useMemo(
     () =>
@@ -130,20 +134,23 @@ export default function Escritorios() {
       </div>
 
       <Card className="overflow-hidden">
-        <Table head={['Escritório', 'Responsável', 'Clientes', 'Plano', 'Status', 'Cadastro', 'Ações']}>
-          {rows.length === 0 && <EmptyRow cols={7} />}
+        <Table head={['Escritório', 'Responsável', 'Clientes', 'Plano', 'Módulos', 'Status', 'Cadastro', 'Ações']}>
+          {rows.length === 0 && <EmptyRow cols={8} />}
           {rows.map((o) => (
             <tr key={o.id} className="hover:bg-slate-50/60">
               <Td>
                 <div className="flex items-center gap-3">
                   <LetterBox name={o.name} size={24} />
-                  <span className="font-bold text-ink">{o.name}</span>
+                  <span className="whitespace-nowrap font-bold text-ink">{o.name}</span>
                 </div>
               </Td>
-              <Td>{o.responsible}</Td>
+              <Td className="whitespace-nowrap">{o.responsible}</Td>
               <Td className="num text-ink">{o.clients}</Td>
               <Td>
                 <PlanBadge plan={o.plan} />
+              </Td>
+              <Td>
+                <ModulesCount office={o} onClick={() => setModulesOf(o)} />
               </Td>
               <Td>
                 <Badge tone={officeStatusTone[o.status]}>{o.status}</Badge>
@@ -156,6 +163,9 @@ export default function Escritorios() {
                   </Button>
                   <Button size="sm" variant="secondary" className="h-7 px-2.5 text-[11px]" onClick={() => openEdit(o)}>
                     Editar
+                  </Button>
+                  <Button size="sm" variant="soft" className="h-7 px-2.5 text-[11px]" onClick={() => setModulesOf(o)}>
+                    Módulos
                   </Button>
                   <Button
                     size="sm"
@@ -235,9 +245,39 @@ export default function Escritorios() {
             <InfoRow label="Mensalidade" value={`R$ ${planPrice[viewing.plan]},00`} />
             <InfoRow label="Status" value={<Badge tone={officeStatusTone[viewing.status]}>{viewing.status}</Badge>} />
             <InfoRow label="Cadastro" value={viewing.createdAt} />
+            <div className="pt-3">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-xs text-muted">Módulos ativos</span>
+                <button
+                  onClick={() => {
+                    const o = viewing
+                    setViewing(null)
+                    setModulesOf(o)
+                  }}
+                  className="cursor-pointer text-xs font-semibold text-brand hover:underline"
+                >
+                  Configurar
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {getOfficeModules(viewing.id, viewing.plan).map((k) => (
+                  <Badge key={k} tone="brand">
+                    {moduleLabel(k)}
+                  </Badge>
+                ))}
+              </div>
+            </div>
           </>
         )}
       </Modal>
+
+      <OfficeModulesModal
+        office={modulesOf}
+        onClose={() => {
+          setModulesOf(null)
+          setTick((t) => t + 1)
+        }}
+      />
 
       <Modal
         open={formOpen}

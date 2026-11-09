@@ -46,6 +46,7 @@ export const adminPortal: PortalConfig = {
 export const escritorioPortal: PortalConfig = {
   variant: 'light',
   prefix: 'ESCRITÓRIO',
+  officeScoped: true,
   logoTag: { label: 'ESCRITÓRIO', className: 'border-emerald-300 bg-emerald-50 text-emerald-700' },
   headerBadge: { label: 'Escritório', className: 'border-emerald-200 bg-emerald-50 text-emerald-700', dot: 'bg-emerald-500' },
   selector: {
@@ -58,20 +59,20 @@ export const escritorioPortal: PortalConfig = {
       items: [
         { to: '/escritorio', label: 'Dashboard', icon: LayoutGrid, num: '01', subtitle: 'Central operacional do escritório' },
         { to: '/escritorio/clientes', label: 'Clientes', icon: Users, num: '02', subtitle: 'Carteira de clientes PJ e PF' },
-        { to: '/escritorio/equipe', label: 'Equipe', icon: User, num: '04', subtitle: 'Gerenciamento de membros e atribuições' },
-        { to: '/escritorio/dp', label: 'Departamento Pessoal', icon: Briefcase, num: '05', subtitle: 'DP consolidado de todos os clientes PJ' },
-        { to: '/escritorio/tributos', label: 'Tributos & Obrigações', icon: Receipt, num: '06', subtitle: 'Visão consolidada de obrigações fiscais' },
-        { to: '/escritorio/notas', label: 'Notas Fiscais', icon: FileText, num: '07', subtitle: 'NFS-e e NF-e dos clientes PJ' },
-        { to: '/escritorio/documentos', label: 'Documentos', icon: File, num: '08', subtitle: 'Central documental de todos os clientes' },
-        { to: '/escritorio/solicitacoes', label: 'Solicitações', icon: MessageSquareText, num: '09', subtitle: 'Central de atendimento e tickets' },
-        { to: '/escritorio/financeiro', label: 'Financeiro', icon: Clock3, num: '10', subtitle: 'Receita, honorários e inadimplência' },
-        { to: '/escritorio/relatorios', label: 'Relatórios', icon: FileBarChart, num: '11', subtitle: 'Geração e exportação de relatórios' },
+        { to: '/escritorio/equipe', module: 'equipe', label: 'Equipe', icon: User, num: '04', subtitle: 'Gerenciamento de membros e atribuições' },
+        { to: '/escritorio/dp', module: 'dp', label: 'Departamento Pessoal', icon: Briefcase, num: '05', subtitle: 'DP consolidado de todos os clientes PJ' },
+        { to: '/escritorio/tributos', module: 'tributos', label: 'Tributos & Obrigações', icon: Receipt, num: '06', subtitle: 'Visão consolidada de obrigações fiscais' },
+        { to: '/escritorio/notas', module: 'notas', label: 'Notas Fiscais', icon: FileText, num: '07', subtitle: 'NFS-e e NF-e dos clientes PJ' },
+        { to: '/escritorio/documentos', module: 'documentos', label: 'Documentos', icon: File, num: '08', subtitle: 'Central documental de todos os clientes' },
+        { to: '/escritorio/solicitacoes', module: 'solicitacoes', label: 'Solicitações', icon: MessageSquareText, num: '09', subtitle: 'Central de atendimento e tickets' },
+        { to: '/escritorio/financeiro', module: 'financeiro', label: 'Financeiro', icon: Clock3, num: '10', subtitle: 'Receita, honorários e inadimplência' },
+        { to: '/escritorio/relatorios', module: 'relatorios', label: 'Relatórios', icon: FileBarChart, num: '11', subtitle: 'Geração e exportação de relatórios' },
       ],
     },
     {
       label: 'GESTÃO',
       items: [
-        { to: '/escritorio/white-label', label: 'White-label', icon: AppWindow, num: '12', subtitle: 'Personalização da marca para o portal do cliente' },
+        { to: '/escritorio/white-label', module: 'whitelabel', label: 'White-label', icon: AppWindow, num: '12', subtitle: 'Personalização da marca para o portal do cliente' },
         { to: '/escritorio/configuracoes', label: 'Configurações', icon: Sun, num: '13', subtitle: 'Preferências, integrações e segurança' },
       ],
     },
@@ -91,6 +92,7 @@ export const escritorioPortal: PortalConfig = {
 export const pjPortal: PortalConfig = {
   variant: 'light',
   prefix: 'CLIENTE PJ',
+  officeScoped: true,
   selector: {
     options: [
       { id: 'tf', name: 'Tech Founders Ltda', doc: 'CNPJ 12.345.678/0001-90', initials: 'TF' },
@@ -102,28 +104,28 @@ export const pjPortal: PortalConfig = {
       label: 'MENU',
       items: [
         { to: '/pj', label: 'Dashboard', icon: LayoutGrid, num: '01', subtitle: 'Competência: Setembro / 2024' },
-        { to: '/pj/guias', label: 'Guias & Tributos', icon: Receipt, num: '02', subtitle: 'Gestão de guias, apurações e comprovantes' },
-        { to: '/pj/notas', label: 'Notas Fiscais', icon: FileText, num: '03', subtitle: 'Emissão, consulta e gestão de NFS-e' },
-        { to: '/pj/folha', label: 'Folha & Funcionários', icon: User, num: '04', subtitle: 'eSocial, pró-labore e férias' },
-        { to: '/pj/socios', label: 'Sócios', icon: Users, num: '05', subtitle: 'Quadro societário e participações' },
-        { to: '/pj/documentos', label: 'Documentos', icon: File, num: '06', subtitle: 'Armazenamento seguro em nuvem — LGPD e ICP-Brasil' },
-        { to: '/pj/certificado', label: 'Certificado Digital', icon: ShieldCheck, num: '07', subtitle: 'Gestão dos certificados ICP-Brasil' },
-        { to: '/pj/solicitacoes', label: 'Solicitações', icon: MessageSquareText, num: '08', subtitle: 'Central de comunicação com o escritório' },
-        { to: '/pj/financeiro', label: 'Financeiro', icon: Clock3, num: '09', subtitle: 'Honorários e faturas do escritório contábil' },
+        { to: '/pj/guias', module: 'tributos', label: 'Guias & Tributos', icon: Receipt, num: '02', subtitle: 'Gestão de guias, apurações e comprovantes' },
+        { to: '/pj/notas', module: 'notas', label: 'Notas Fiscais', icon: FileText, num: '03', subtitle: 'Emissão, consulta e gestão de NFS-e' },
+        { to: '/pj/folha', module: 'dp', label: 'Folha & Funcionários', icon: User, num: '04', subtitle: 'eSocial, pró-labore e férias' },
+        { to: '/pj/socios', module: 'societario', label: 'Sócios', icon: Users, num: '05', subtitle: 'Quadro societário e participações' },
+        { to: '/pj/documentos', module: 'documentos', label: 'Documentos', icon: File, num: '06', subtitle: 'Armazenamento seguro em nuvem — LGPD e ICP-Brasil' },
+        { to: '/pj/certificado', module: 'certificado', label: 'Certificado Digital', icon: ShieldCheck, num: '07', subtitle: 'Gestão dos certificados ICP-Brasil' },
+        { to: '/pj/solicitacoes', module: 'solicitacoes', label: 'Solicitações', icon: MessageSquareText, num: '08', subtitle: 'Central de comunicação com o escritório' },
+        { to: '/pj/financeiro', module: 'financeiro', label: 'Financeiro', icon: Clock3, num: '09', subtitle: 'Honorários e faturas do escritório contábil' },
         { to: '/pj/empresa', label: 'Dados da Empresa', icon: Building2, num: '10', subtitle: 'Cadastro e informações fiscais da empresa' },
       ],
     },
     {
       label: 'CONTA',
       items: [
-        { to: '/pj/configuracoes', label: 'Configurações', icon: Sun, subtitle: 'Configure a identidade visual da sua marca', noPrefix: true },
+        { to: '/pj/configuracoes', module: 'whitelabel', label: 'Configurações', icon: Sun, subtitle: 'Configure a identidade visual da sua marca', noPrefix: true },
       ],
     },
   ],
   user: { name: 'João da Silva', role: 'Sócio-Administrador', initials: 'JS' },
   switches: [
     { label: 'Escritório Contábil', to: '/escritorio', tone: 'green' },
-    { label: 'Portal Pessoa Física', to: '/pf', tone: 'sky' },
+    { label: 'Portal Pessoa Física', to: '/pf', tone: 'sky', module: 'portal_pf' },
     { label: 'Super Admin', to: '/admin', tone: 'violet' },
   ],
   showFooter: true,
@@ -137,6 +139,8 @@ export const pjPortal: PortalConfig = {
 export const pfPortal: PortalConfig = {
   variant: 'light',
   prefix: 'CLIENTE PF',
+  module: 'portal_pf',
+  officeScoped: true,
   logoTag: { label: 'PF', className: 'border-sky-200 bg-sky-50 text-sky-600' },
   headerBadge: { label: 'Pessoa Física', className: 'border-sky-200 bg-sky-50 text-sky-700', dot: 'bg-sky-500' },
   selector: {
@@ -149,11 +153,11 @@ export const pfPortal: PortalConfig = {
       label: 'MENU',
       items: [
         { to: '/pf', label: 'Dashboard', icon: LayoutGrid, num: '01', subtitle: 'Visão geral das suas obrigações' },
-        { to: '/pf/imposto-renda', label: 'Imposto de Renda', icon: FileSpreadsheet, num: '02', subtitle: 'IRPF — Declarações e pendências' },
-        { to: '/pf/obrigacoes', label: 'Obrigações', icon: Receipt, num: '03', subtitle: 'Carnê-Leão e outras obrigações' },
-        { to: '/pf/documentos', label: 'Documentos', icon: File, num: '04', subtitle: 'Cofre pessoal de documentos' },
-        { to: '/pf/solicitacoes', label: 'Solicitações', icon: MessageSquareText, num: '05', subtitle: 'Comunicação com o escritório' },
-        { to: '/pf/financeiro', label: 'Financeiro', icon: Clock3, num: '06', subtitle: 'Honorários e faturas' },
+        { to: '/pf/imposto-renda', module: 'irpf', label: 'Imposto de Renda', icon: FileSpreadsheet, num: '02', subtitle: 'IRPF — Declarações e pendências' },
+        { to: '/pf/obrigacoes', module: 'tributos', label: 'Obrigações', icon: Receipt, num: '03', subtitle: 'Carnê-Leão e outras obrigações' },
+        { to: '/pf/documentos', module: 'documentos', label: 'Documentos', icon: File, num: '04', subtitle: 'Cofre pessoal de documentos' },
+        { to: '/pf/solicitacoes', module: 'solicitacoes', label: 'Solicitações', icon: MessageSquareText, num: '05', subtitle: 'Comunicação com o escritório' },
+        { to: '/pf/financeiro', module: 'financeiro', label: 'Financeiro', icon: Clock3, num: '06', subtitle: 'Honorários e faturas' },
       ],
     },
     {

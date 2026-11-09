@@ -20,6 +20,7 @@ export type Office = {
 }
 
 export const offices: Office[] = [
+  { id: 11, name: 'Contador Central Assessoria', responsible: 'Carlos Andrade', clients: 247, plan: 'Profissional', status: 'Ativo', createdAt: '10/12/2023', city: 'São Paulo, SP', email: 'contato@contadorcentral.com.br' },
   { id: 1, name: 'Alfa Contabilidade Ltda', responsible: 'Ana Souza', clients: 87, plan: 'Premium', status: 'Ativo', createdAt: '03/01/2024', city: 'São Paulo, SP', email: 'ana@alfacontabil.com.br' },
   { id: 2, name: 'Beta Assessoria Fiscal', responsible: 'Carlos Mendes', clients: 54, plan: 'Profissional', status: 'Ativo', createdAt: '15/02/2024', city: 'Curitiba, PR', email: 'carlos@beta.com' },
   { id: 3, name: 'Gama Contadores Associados', responsible: 'Juliana Ramos', clients: 28, plan: 'Essencial', status: 'Ativo', createdAt: '20/03/2024', city: 'Recife, PE', email: 'juliana@gama.com.br' },

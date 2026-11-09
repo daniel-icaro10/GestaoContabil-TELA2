@@ -115,12 +115,12 @@ function PlanMenu({
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-line bg-white text-slate-500 hover:bg-slate-50"
+        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-line bg-surface text-slate-500 hover:bg-slate-50"
       >
         <MoreHorizontal size={16} />
       </button>
       {open && (
-        <div className="animate-fade absolute bottom-full right-0 z-20 mb-1 w-48 rounded-xl border border-line bg-white p-1 shadow-xl">
+        <div className="animate-fade absolute bottom-full right-0 z-20 mb-1 w-48 rounded-xl border border-line bg-surface p-1 shadow-xl">
           <button className={item} onClick={() => (setOpen(false), onDuplicate())}>
             Duplicar plano
           </button>

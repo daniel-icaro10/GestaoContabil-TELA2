@@ -64,10 +64,10 @@ export function PayModal({
       </div>
       {metodo === 'pix' ? (
         <div className="mt-4 flex flex-col items-center gap-3 rounded-xl border border-line bg-slate-50 p-4">
-          <div className="flex h-32 w-32 items-center justify-center rounded-xl border border-line bg-white text-slate-700">
+          <div className="flex h-32 w-32 items-center justify-center rounded-xl border border-line bg-surface text-slate-700">
             <QrCode size={96} strokeWidth={1.2} />
           </div>
-          <p className="w-full break-all rounded-lg bg-white p-2 text-[10px] text-slate-500">{PIX_CODE}</p>
+          <p className="w-full break-all rounded-lg bg-surface p-2 text-[10px] text-slate-500">{PIX_CODE}</p>
           <Button
             variant="soft"
             size="sm"

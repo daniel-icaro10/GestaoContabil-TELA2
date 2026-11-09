@@ -25,7 +25,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           return (
             <div
               key={t.id}
-              className="animate-toast flex min-w-72 max-w-sm items-start gap-3 rounded-xl border border-line bg-white px-4 py-3 shadow-lg"
+              className="animate-toast flex min-w-72 max-w-sm items-start gap-3 rounded-xl border border-line bg-surface px-4 py-3 shadow-lg"
             >
               <Icon
                 size={18}
