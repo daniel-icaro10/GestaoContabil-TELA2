@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/* Cor primária dinâmica (white-label). Alterada em tempo real via BrandProvider. */
+:root {
+  --brand: #3b4fd8;
+}
+
+@theme inline {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Lexend Exa", "Plus Jakarta Sans", ui-sans-serif, sans-serif;
+  --color-brand: var(--brand);
+}
+
+@theme {
+  --color-ink: #0f172a;
+  --color-muted: #8a93a6;
+  --color-line: #e8ebf2;
+  --color-canvas: #f4f6fa;
+  --color-navy: #111428;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-canvas text-ink font-sans antialiased;
+  font-size: 14px;
+}
+
+/* Números com fonte larga, como nas referências */
+.num {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.scroll-thin::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: #c9ced8;
+  border-radius: 99px;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-toast {
+  animation: toast-in 0.2s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-fade {
+  animation: fade-in 0.15s ease-out;
+}
