@@ -20,6 +20,7 @@ import {
 } from '../../components/ui'
 import { useToast } from '../../components/Toast'
 import { SpedyStatus } from '../../components/SpedyStatus'
+import { enviarNfseSpedy, loadSpedyConfig, nfseEnvLabel } from '../../lib/spedy'
 import { brl, downloadCsv, downloadFile, matches } from '../../lib/utils'
 import { notas as initial, type Nota } from './data'
 
@@ -53,9 +54,10 @@ export default function NotasFiscais() {
       return
     }
     const next = String(Math.max(...rows.map((r) => Number(r.numero))) + 1).padStart(6, '0')
+    const id = 'n' + Date.now()
     setRows((r) => [
       {
-        id: 'n' + Date.now(),
+        id,
         numero: next,
         tomador: form.tomador,
         cnpj: form.cnpj || '—',
@@ -69,7 +71,12 @@ export default function NotasFiscais() {
     ])
     setEmit(false)
     setForm({ tomador: '', cnpj: '', servico: '', valor: '' })
-    toast(`NFS-e ${next} enviada para autorização da prefeitura`)
+    const enviada = enviarNfseSpedy(() => {
+      setRows((r) => r.map((x) => (x.id === id ? { ...x, status: 'autorizada' } : x)))
+      toast(`NFS-e ${next} autorizada pela prefeitura (retorno Spedy)`)
+    })
+    if (enviada) toast(`NFS-e ${next} enviada à Spedy — na fila de autorização`)
+    else toast(`Integração Spedy não configurada — NFS-e ${next} salva como pendente`, 'warning')
   }
 
   return (
@@ -79,7 +86,7 @@ export default function NotasFiscais() {
         tone="brand"
         icon={<FileText size={18} />}
         title="Integração NFS-e ativa — Prefeitura de São Paulo"
-        text="Emissão automatizada via webservice municipal · ISS retido na fonte calculado automaticamente"
+        text="Emissão automatizada via Spedy · ISS retido na fonte calculado automaticamente"
         action={<Button onClick={() => setEmit(true)}>Emitir Nova NFS-e</Button>}
       />
 
@@ -214,7 +221,10 @@ export default function NotasFiscais() {
         open={emit}
         onClose={() => setEmit(false)}
         title="Emitir Nova NFS-e"
-        subtitle="Prefeitura de São Paulo · ISS 5% retido na fonte"
+        subtitle={(() => {
+          const c = loadSpedyConfig()
+          return `Prefeitura de São Paulo via Spedy · ${nfseEnvLabel[c.nfse.environmentType]} · série ${c.nfse.series} · ISS ${c.nfse.defaultIssRate}%`
+        })()}
         footer={
           <>
             <Button variant="secondary" onClick={() => setEmit(false)}>Cancelar</Button>

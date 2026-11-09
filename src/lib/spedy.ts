@@ -110,6 +110,17 @@ export function spedyReady(cfg = loadSpedyConfig()) {
   return cfg.enabled && cfg.ownerKeySet[cfg.env]
 }
 
+/**
+ * Simula o POST /v1/service-invoices: a nota entra na fila (enqueued) e a confirmação da prefeitura
+ * chega depois, como faria o webhook invoice.status_changed. Retorna false se a integração não estiver pronta.
+ * Em produção esta chamada é feita pelo backend, com a chave da empresa emissora.
+ */
+export function enviarNfseSpedy(onAutorizada: () => void): boolean {
+  if (!spedyReady()) return false
+  setTimeout(onAutorizada, 2500)
+  return true
+}
+
 export const nfseEnvLabel: Record<NfseEnvironment, string> = {
   simulation: 'Simulação',
   homologation: 'Homologação',

@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { Card, Badge, Button, Chips, SearchInput, Table, Td, EmptyRow, Modal, InfoRow, PageTitle, Progress, Field, Input, Select, Textarea, type Tone } from '../../components/ui'
 import { useToast } from '../../components/Toast'
 import { SpedyStatus } from '../../components/SpedyStatus'
+import { enviarNfseSpedy, loadSpedyConfig, nfseEnvLabel } from '../../lib/spedy'
 import { brl, matches, downloadFile } from '../../lib/utils'
 import { notas as seed, clientes, type Nota } from './data'
 
@@ -56,13 +57,14 @@ export default function NotasFiscais() {
       status: 'Pendente',
     }
     setLista((l) => [nova, ...l])
-    toast(`NFS-e ${nova.numero} enviada para autorização`)
     setEmitir(false)
     setForm({ cliente: empresasPJ[0], tomador: '', valor: '', servico: '' })
-    setTimeout(() => {
+    const enviada = enviarNfseSpedy(() => {
       setLista((l) => l.map((n) => (n.id === nova.id ? { ...n, status: 'Autorizada' } : n)))
-      toast(`NFS-e ${nova.numero} autorizada pela prefeitura`)
-    }, 3000)
+      toast(`NFS-e ${nova.numero} autorizada pela prefeitura (retorno Spedy)`)
+    })
+    if (enviada) toast(`NFS-e ${nova.numero} enviada à Spedy — na fila de autorização`)
+    else toast(`Integração Spedy não configurada — NFS-e ${nova.numero} salva como pendente`, 'warning')
   }
 
   function importar(files: File[]) {
@@ -219,7 +221,10 @@ export default function NotasFiscais() {
         open={emitir}
         onClose={() => setEmitir(false)}
         title="Emitir NFS-e"
-        subtitle="Emissão em nome do cliente via webservice municipal"
+        subtitle={(() => {
+          const c = loadSpedyConfig()
+          return `Emissão em nome do cliente via Spedy · ${nfseEnvLabel[c.nfse.environmentType]} · série ${c.nfse.series} · ISS ${c.nfse.defaultIssRate}%`
+        })()}
         footer={
           <>
             <Button variant="secondary" onClick={() => setEmitir(false)}>Cancelar</Button>
