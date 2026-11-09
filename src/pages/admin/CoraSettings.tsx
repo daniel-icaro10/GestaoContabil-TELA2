@@ -33,7 +33,7 @@ import {
 
 const envLabel: Record<CoraEnv, string> = { stage: 'Stage (homologação)', production: 'Produção' }
 
-function Block({ icon, title, subtitle, right, children }: { icon: ReactNode; title: string; subtitle?: string; right?: ReactNode; children: ReactNode }) {
+export function Block({ icon, title, subtitle, right, children }: { icon: ReactNode; title: string; subtitle?: string; right?: ReactNode; children: ReactNode }) {
   return (
     <Card className="p-5">
       <div className="flex items-start gap-3">
@@ -49,7 +49,7 @@ function Block({ icon, title, subtitle, right, children }: { icon: ReactNode; ti
   )
 }
 
-function FilePick({ label, accept, file, onPick }: { label: string; accept: string; file?: string; onPick: (name: string) => void }) {
+export function FilePick({ label, accept, file, onPick }: { label: string; accept: string; file?: string; onPick: (name: string) => void }) {
   const ref = useRef<HTMLInputElement>(null)
   return (
     <Field label={label}>

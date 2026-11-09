@@ -19,6 +19,7 @@ import {
   MiniBars,
 } from '../../components/ui'
 import { useToast } from '../../components/Toast'
+import { SpedyStatus } from '../../components/SpedyStatus'
 import { brl, downloadCsv, downloadFile, matches } from '../../lib/utils'
 import { notas as initial, type Nota } from './data'
 
@@ -73,6 +74,7 @@ export default function NotasFiscais() {
 
   return (
     <div className="space-y-5">
+      <SpedyStatus />
       <Banner
         tone="brand"
         icon={<FileText size={18} />}

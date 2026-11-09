@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { Card, Badge, Button, Chips, SearchInput, Table, Td, EmptyRow, Modal, InfoRow, PageTitle, Progress, Field, Input, Select, Textarea, type Tone } from '../../components/ui'
 import { useToast } from '../../components/Toast'
+import { SpedyStatus } from '../../components/SpedyStatus'
 import { brl, matches, downloadFile } from '../../lib/utils'
 import { notas as seed, clientes, type Nota } from './data'
 
@@ -83,6 +84,7 @@ export default function NotasFiscais() {
 
   return (
     <div className="space-y-5">
+      <SpedyStatus />
       <PageTitle
         title="Notas Fiscais"
         subtitle="Monitoramento consolidado de NFS-e e NF-e por cliente"

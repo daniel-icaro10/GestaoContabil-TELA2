@@ -5,9 +5,10 @@ import { useToast } from '../../components/Toast'
 import { BRAND_COLORS, useBrand } from '../../components/Brand'
 import { cn } from '../../lib/utils'
 import CoraSettings from './CoraSettings'
+import SpedySettings from './SpedySettings'
 import { useSearchParams } from 'react-router-dom'
 
-type Tab = 'geral' | 'marca' | 'notificacoes' | 'seguranca' | 'integracoes' | 'cora'
+type Tab = 'geral' | 'marca' | 'notificacoes' | 'seguranca' | 'integracoes' | 'cora' | 'spedy'
 
 function Section({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
   return (
@@ -35,7 +36,9 @@ export default function Configuracoes() {
   const toast = useToast()
   const brand = useBrand()
   const [params] = useSearchParams()
-  const [tab, setTab] = useState<Tab>(params.get('tab') === 'cora' ? 'cora' : 'geral')
+  const initialTab = params.get('tab')
+  const [tab, setTab] = useState<Tab>(initialTab === 'cora' || initialTab === 'spedy' ? initialTab : 'geral')
+  const wide = tab === 'cora' || tab === 'spedy'
 
   const [geral, setGeral] = useState({
     nome: 'HUBContábil Financial',
@@ -53,7 +56,6 @@ export default function Configuracoes() {
   const [integ, setInteg] = useState([
     { id: 'receita', name: 'Receita Federal (e-CAC)', desc: 'Consulta de situação fiscal e CND', on: true },
     { id: 'esocial', name: 'eSocial', desc: 'Transmissão de eventos de folha', on: true },
-    { id: 'nfse', name: 'NFS-e Nacional', desc: 'Emissão de notas fiscais de serviço', on: true },
     { id: 'whatsapp', name: 'WhatsApp Business API', desc: 'Notificações e atendimento', on: false },
     { id: 'smtp', name: 'SMTP Personalizado', desc: 'Envio de e-mails transacionais', on: false },
   ])
@@ -61,7 +63,7 @@ export default function Configuracoes() {
   const save = () => toast('Configurações salvas com sucesso.')
 
   return (
-    <div className={cn('space-y-5', tab === 'cora' ? 'max-w-[920px]' : 'max-w-[680px]')}>
+    <div className={cn('space-y-5', wide ? 'max-w-[980px]' : 'max-w-[680px]')}>
       <Tabs
         value={tab}
         onChange={setTab}
@@ -72,10 +74,12 @@ export default function Configuracoes() {
           { value: 'seguranca', label: 'Segurança' },
           { value: 'integracoes', label: 'Integrações' },
           { value: 'cora', label: 'Pagamentos (Cora)' },
+          { value: 'spedy', label: 'Notas Fiscais (Spedy)' },
         ]}
       />
 
       {tab === 'cora' && <CoraSettings />}
+      {tab === 'spedy' && <SpedySettings />}
 
       {tab === 'geral' && (
         <>
@@ -235,7 +239,7 @@ export default function Configuracoes() {
         </Section>
       )}
 
-      {tab !== 'cora' && (
+      {!wide && (
         <div className="flex justify-end">
           <Button size="lg" icon={<Save size={16} />} onClick={save}>
             Salvar alterações
