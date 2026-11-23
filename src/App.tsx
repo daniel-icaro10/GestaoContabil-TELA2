@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { PortalLayout } from './components/PortalLayout'
 import { adminPortal, escritorioPortal, pjPortal, pfPortal } from './portals'
@@ -45,6 +46,9 @@ import PfSolicitacoes from './pages/pf/Solicitacoes'
 import PfFinanceiro from './pages/pf/Financeiro'
 import PfDados from './pages/pf/DadosPessoais'
 import PfConfiguracoes from './pages/pf/Configuracoes'
+
+// Vitrine de componentes: só existe em desenvolvimento (não vai para o build de produção)
+const UiKit = import.meta.env.DEV ? lazy(() => import('./pages/dev/UiKit')) : null
 
 export default function App() {
   return (
@@ -102,6 +106,8 @@ export default function App() {
           <Route path="dados" element={<PfDados />} />
           <Route path="configuracoes" element={<PfConfiguracoes />} />
         </Route>
+
+        {UiKit && <Route path="/ui" element={<Suspense fallback={null}><UiKit /></Suspense>} />}
 
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

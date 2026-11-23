@@ -1,55 +1,170 @@
 @import "tailwindcss";
 
-/* Cor primária dinâmica (white-label). Alterada em tempo real via BrandProvider. */
-:root {
-  --brand: #3b4fd8;
-  color-scheme: light;
-}
-
-@theme inline {
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Lexend Exa", "Plus Jakarta Sans", ui-sans-serif, sans-serif;
-  --color-brand: var(--brand);
-}
-
-@theme {
-  --color-ink: #0f172a;
-  --color-muted: #8a93a6;
-  --color-line: #e8ebf2;
-  --color-canvas: #f4f6fa;
-  --color-surface: #ffffff;
-  --color-navy: #111428;
-}
-
 /* ============================================================
-   MODO ESCURO
-   Os tokens e as escalas de cor são redefinidos aqui, então todas
-   as telas mudam de tema sem precisar de classes "dark:".
+   DESIGN TOKENS — HUBContábil
+   Identidade: Premium Contabilidade (vemprapremium.com.br)
+
+   --brand é a cor primária do escritório (white-label) e pode ser
+   trocada em tempo real pelo BrandProvider. Todas as outras cores
+   de "primária" derivam dela.
    ============================================================ */
+:root {
+  color-scheme: light;
+
+  /* Primária (white-label) */
+  --brand: #005690;
+  --brand-hover: #00467a;
+
+  --primary: var(--brand);
+  --primary-hover: var(--brand-hover);
+  --primary-solid: var(--brand); /* fundo de botões sólidos (texto branco) */
+  --primary-text: var(--brand); /* links e textos na cor primária */
+  --primary-soft: color-mix(in srgb, var(--primary) 8%, transparent);
+
+  /* Secundária: ícones, badges informativos, gráficos */
+  --secondary: #669abc;
+  --info-text: #3d6f92; /* versão AA da secundária para texto */
+
+  /* Texto */
+  --ink: #212529;
+  --ink-muted: #64748b;
+  --ink-subtle: #475569; /* texto secundário sobre superfície alternativa */
+
+  /* Superfícies */
+  --canvas: #f8f9fa;
+  --surface: #ffffff;
+  --surface-alt: #f1f5f9;
+  --line: #dee2e6;
+
+  /* Status (cor do ícone/borda) e versão AA para texto */
+  --success: #16a34a;
+  --success-text: #15803d;
+  --warning: #d97706;
+  --warning-text: #b45309;
+  --danger: #dc2626;
+  --danger-text: #b91c1c;
+
+  /* Fundos sólidos com texto branco (>= 4.5:1 nos dois temas) */
+  --success-solid: #15803d;
+  --warning-solid: #b45309;
+  --danger-solid: #dc2626;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --overlay: rgba(15, 23, 42, 0.5);
+}
+
+/* Tema escuro: mesma paleta, tons ajustados para contraste */
 html.dark {
   color-scheme: dark;
 
-  --color-ink: #e8ecf5;
-  --color-muted: #7f89a3;
-  --color-line: #232a40;
-  --color-canvas: #0b0f1c;
-  --color-surface: #131828;
-  --color-navy: #0a0d18;
+  --primary: var(--brand-dark, #3b82c4);
+  --primary-hover: var(--brand-dark-hover, #235a8c); /* hover de botão sólido */
+  --primary-solid: var(--brand-dark-solid, #2b6ca8); /* #3B82C4 com texto branco fica abaixo de 4.5:1 */
+  --primary-text: var(--brand-dark-text, #7cb4e4);
+  --primary-soft: color-mix(in srgb, var(--primary) 16%, transparent);
 
-  /* escala neutra invertida */
-  --color-slate-50: #171d30;
-  --color-slate-100: #1d2438;
-  --color-slate-200: #283049;
-  --color-slate-300: #3a4360;
-  --color-slate-400: #66708c;
-  --color-slate-500: #8e98b2;
-  --color-slate-600: #b1b9cd;
-  --color-slate-700: #cbd2e1;
-  --color-slate-800: #dfe4ee;
-  --color-slate-900: #eef1f7;
+  --secondary: #7fadcb;
+  --info-text: #9cc2dc;
 
-  /* tons claros coloridos viram tons translúcidos sobre o fundo escuro */
-  --tint-base: #131828;
+  --ink: #e2e8f0;
+  --ink-muted: #94a3b8;
+  --ink-subtle: #cbd5e1;
+
+  --canvas: #0f172a;
+  --surface: #1e293b;
+  --surface-alt: #273449;
+  --line: #334155;
+
+  --success: #22c55e;
+  --success-text: #4ade80;
+  --warning: #f59e0b;
+  --warning-text: #fbbf24;
+  --danger: #ef4444;
+  --danger-text: #f87171;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --overlay: rgba(2, 6, 23, 0.7);
+}
+
+@theme inline {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-solid: var(--primary-solid);
+  --color-primary-text: var(--primary-text);
+  --color-primary-soft: var(--primary-soft);
+  /* compatibilidade: telas antigas usam bg-brand / text-brand */
+  --color-brand: var(--primary);
+
+  --color-secondary: var(--secondary);
+  --color-info-text: var(--info-text);
+
+  --color-ink: var(--ink);
+  --color-muted: var(--ink-muted);
+  --color-subtle: var(--ink-subtle);
+
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
+  --color-line: var(--line);
+  --color-navy: var(--ink);
+
+  --color-success: var(--success);
+  --color-success-text: var(--success-text);
+  --color-warning: var(--warning);
+  --color-warning-text: var(--warning-text);
+  --color-danger: var(--danger);
+  --color-danger-text: var(--danger-text);
+  --color-success-solid: var(--success-solid);
+  --color-warning-solid: var(--warning-solid);
+  --color-danger-solid: var(--danger-solid);
+  --color-overlay: var(--overlay);
+
+  --shadow-card: var(--shadow-card);
+}
+
+@theme {
+  /* Tipografia: títulos 24/20/16, corpo 14, labels 12 */
+  --text-title-1: 24px;
+  --text-title-1--line-height: 32px;
+  --text-title-1--font-weight: 700;
+  --text-title-2: 20px;
+  --text-title-2--line-height: 28px;
+  --text-title-2--font-weight: 600;
+  --text-title-3: 16px;
+  --text-title-3--line-height: 24px;
+  --text-title-3--font-weight: 600;
+  --text-body: 14px;
+  --text-body--line-height: 20px;
+  --text-label: 12px;
+  --text-label--line-height: 16px;
+
+  /* Raio: 8px controles, 12px cards */
+  --radius-control: 8px;
+  --radius-card: 12px;
+}
+
+/* ============================================================
+   Compatibilidade do tema escuro com telas ainda não migradas
+   (usam a escala slate/emerald/... do Tailwind diretamente).
+   Será removido conforme cada tela passar a usar os tokens.
+   ============================================================ */
+html.dark {
+  --tint-base: #1e293b;
+
+  --color-slate-50: #222f44;
+  --color-slate-100: #273449;
+  --color-slate-200: #334155;
+  --color-slate-300: #475569;
+  --color-slate-400: #64748b;
+  --color-slate-500: #94a3b8;
+  --color-slate-600: #b4c0d0;
+  --color-slate-700: #cbd5e1;
+  --color-slate-800: #e2e8f0;
+  --color-slate-900: #f1f5f9;
+
   --color-emerald-50: color-mix(in oklab, #10b981 12%, var(--tint-base));
   --color-emerald-100: color-mix(in oklab, #10b981 20%, var(--tint-base));
   --color-emerald-200: color-mix(in oklab, #10b981 32%, var(--tint-base));
@@ -89,7 +204,6 @@ html.dark {
   --color-teal-50: color-mix(in oklab, #14b8a6 12%, var(--tint-base));
 }
 
-/* Textos coloridos escuros ganham contraste no tema escuro */
 html.dark .text-indigo-600,
 html.dark .text-indigo-500 {
   color: #8b93ff;
@@ -113,24 +227,19 @@ html.dark .text-orange-600,
 html.dark .text-amber-600 {
   color: #f5a524;
 }
-/* O texto na cor da marca fica mais claro para ler bem sobre o fundo escuro */
 html.dark .text-brand {
-  color: color-mix(in oklab, var(--brand) 62%, white);
+  color: var(--primary-text);
 }
-/* Botões sólidos mantêm o tom escuro no hover */
 html.dark .hover\:bg-emerald-700:hover {
   background-color: #047857;
 }
 html.dark .hover\:bg-amber-700:hover {
   background-color: #b45309;
 }
-html.dark .shadow-sm,
-html.dark .shadow-lg,
-html.dark .shadow-xl,
-html.dark .shadow-2xl {
-  --tw-shadow-color: rgb(0 0 0 / 0.5);
-}
 
+/* ============================================================
+   Base
+   ============================================================ */
 html,
 body,
 #root {
@@ -140,21 +249,28 @@ body,
 body {
   @apply bg-canvas text-ink font-sans antialiased;
   font-size: 14px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  line-height: 20px;
+  font-feature-settings: "cv11", "ss01";
 }
 
-/* Fundo suave com brilho da marca */
+/* Foco visível em todos os elementos interativos */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+/* Campos de formulário usam anel interno em vez de outline deslocado */
+:where(input, select, textarea):focus-visible {
+  outline-offset: 0;
+}
+
 .app-canvas {
-  background:
-    radial-gradient(1200px 500px at 100% -10%, color-mix(in oklab, var(--brand) 7%, transparent), transparent 60%),
-    radial-gradient(900px 400px at -10% 110%, color-mix(in oklab, #8b5cf6 5%, transparent), transparent 60%),
-    var(--color-canvas);
+  background: var(--canvas);
 }
 
-/* Números com fonte larga, como nas referências */
+/* Números: mesma fonte, algarismos tabulares para alinhar valores */
 .num {
-  font-family: var(--font-display);
-  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
 }
 
 .scroll-thin::-webkit-scrollbar {
@@ -162,7 +278,7 @@ body {
   width: 8px;
 }
 .scroll-thin::-webkit-scrollbar-thumb {
-  background: var(--color-slate-300);
+  background: var(--line);
   border-radius: 99px;
 }
 .scroll-thin::-webkit-scrollbar-track {
@@ -198,7 +314,7 @@ body {
 @keyframes page-in {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
@@ -206,13 +322,15 @@ body {
   }
 }
 .animate-page {
-  animation: page-in 0.25s ease-out;
+  animation: page-in 0.2s ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-page,
   .animate-toast,
-  .animate-fade {
+  .animate-fade,
+  .animate-pulse,
+  .animate-spin {
     animation: none;
   }
 }

@@ -6,6 +6,22 @@ export function brl(value: number) {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 
+/**
+ * Data no formato dd/mm/aaaa. Aceita Date, ISO ("2026-11-23") ou texto já formatado.
+ * Datas ISO sem hora são lidas como data local (evita voltar um dia por fuso).
+ */
+export function formatDate(value: Date | string | number | null | undefined) {
+  if (value === null || value === undefined || value === '') return '—'
+  if (typeof value === 'string') {
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) return value
+    const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
+    if (iso) return `${iso[3]}/${iso[2]}/${iso[1]}`
+  }
+  const d = value instanceof Date ? value : new Date(value)
+  if (Number.isNaN(d.getTime())) return String(value)
+  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+}
+
 export function initials(name: string) {
   return name
     .split(' ')

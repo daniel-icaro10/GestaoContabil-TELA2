@@ -10,7 +10,7 @@ function initialTheme(): Theme {
     const saved = localStorage.getItem(KEY)
     if (saved === 'light' || saved === 'dark') return saved
   } catch {}
-  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  return 'light' // tema claro é o padrão; o escuro é opcional
 }
 
 const ThemeCtx = createContext<{ theme: Theme; toggle: () => void }>(null!)
@@ -43,15 +43,16 @@ export function ThemeToggle({ className }: { className?: string }) {
       onClick={toggle}
       title={dark ? 'Ativar modo claro' : 'Ativar modo escuro'}
       aria-label={dark ? 'Ativar modo claro' : 'Ativar modo escuro'}
+      aria-pressed={dark}
       className={cn(
-        'relative flex h-9 w-16 cursor-pointer items-center rounded-full border border-line bg-slate-100 p-1 transition',
+        'relative flex h-10 w-[68px] cursor-pointer items-center rounded-full border border-line bg-surface-alt p-1 transition',
         className,
       )}
     >
       <span
         className={cn(
-          'flex h-7 w-7 items-center justify-center rounded-full bg-surface shadow-sm transition-all duration-300',
-          dark ? 'translate-x-7 text-violet-400' : 'translate-x-0 text-amber-500',
+          'flex h-8 w-8 items-center justify-center rounded-full bg-surface shadow-card transition-transform duration-300',
+          dark ? 'translate-x-7 text-primary-text' : 'translate-x-0 text-warning',
         )}
       >
         {dark ? <Moon size={14} /> : <Sun size={14} />}

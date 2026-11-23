@@ -7,15 +7,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend+Exa:wght@300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <title>HUBContábil Financial</title>
     <script>
-      // aplica o tema antes de renderizar para evitar "piscar" branco
+      // aplica o tema escolhido antes de renderizar (claro é o padrão)
       try {
         var t = localStorage.getItem('hub.theme')
-        if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches))
+        if (t === 'dark')
           document.documentElement.classList.add('dark')
       } catch (e) {}
     </script>
