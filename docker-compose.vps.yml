@@ -1,0 +1,13 @@
+# PRODUÇÃO na VPS (a mesma do Premium/Rebanho/Calculus, com Easypanel/Traefik nas portas 80/443).
+# O código fica em /opt/hubcontabil e é enviado pelo deploy/deploy.sh.
+#   cd /opt/hubcontabil && docker compose -f docker-compose.vps.yml up -d --build
+# Sem domínio, abre em http://IP:3400. Com domínio: aponte-o no Easypanel para a porta 3400 do host.
+name: hubcontabil
+
+services:
+  app:
+    build: .
+    image: hubcontabil-app
+    restart: unless-stopped
+    ports:
+      - "3400:80"
