@@ -3,3 +3,6 @@ dist
 *.local
 * - Copia.png
 *.tsbuildinfo
+.env
+.env.*
+!.env.example

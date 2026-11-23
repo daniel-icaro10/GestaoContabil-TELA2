@@ -1,13 +1,44 @@
 # PRODUÇÃO na VPS (a mesma do Premium/Rebanho/Calculus, com Easypanel/Traefik nas portas 80/443).
 # O código fica em /opt/hubcontabil e é enviado pelo deploy/deploy.sh.
-#   cd /opt/hubcontabil && docker compose -f docker-compose.vps.yml up -d --build
+# Segredos ficam em /opt/hubcontabil/.env.vps (criado na VPS, nunca vai para o git):
+#   POSTGRES_PASSWORD, JWT_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD
+#   cd /opt/hubcontabil && docker compose --env-file .env.vps -f docker-compose.vps.yml up -d --build
 # Sem domínio, abre em http://IP:3400. Com domínio: aponte-o no Easypanel para a porta 3400 do host.
 name: hubcontabil
 
 services:
+  postgres:
+    image: postgres:16.15-alpine3.23
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: hubcontabil
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no .env.vps}
+      POSTGRES_DB: hubcontabil
+      TZ: America/Sao_Paulo
+      PGTZ: America/Sao_Paulo
+    volumes:
+      - hubcontabil-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hubcontabil -d hubcontabil"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
   app:
     build: .
     image: hubcontabil-app
     restart: unless-stopped
     ports:
-      - "3400:80"
+      - "3400:3000"
+    environment:
+      DATABASE_URL: postgres://hubcontabil:${POSTGRES_PASSWORD}@postgres:5432/hubcontabil
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no .env.vps}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      COOKIE_SECURE: ${COOKIE_SECURE:-0}
+      TZ: America/Sao_Paulo
+    depends_on:
+      postgres: { condition: service_healthy }
+
+volumes:
+  hubcontabil-pg:
